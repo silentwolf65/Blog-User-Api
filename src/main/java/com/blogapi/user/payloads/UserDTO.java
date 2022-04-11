@@ -4,14 +4,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
 public class UserDTO {
 	
 	private Integer id;
+	
+	@NotEmpty
+	@Size(min = 3,message="UserName must be minimum 3 characters")
 	private String name;
+	
+	@Email(message="Email address is not valid !!")
 	private String email;
+	
+	@NotEmpty
+	@Size(min=4,max=10,message="Password must be minimum 4 chars and maximum 10 chars !!")
 	private String password;
+	
+	@NotEmpty
 	private String about;
 }
