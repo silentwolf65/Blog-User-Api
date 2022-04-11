@@ -1,0 +1,11 @@
+server:
+  port: 9090
+
+#DataBase Properties
+spring:  datasource:    url: jdbc:oracle:thin:@localhost:1521:orcl
+    username: scott
+    password: scott
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+
+#hibernate auto property  jpa:    hibernate:      ddl-auto: update
+    show-sql: true 
