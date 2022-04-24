@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Comparator;
+import java.util.List;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -11,7 +14,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
-public class UserDTO {
+public class UserDTO implements Comparable<UserDTO>{
 	
 	private Integer id;
 	
@@ -28,4 +31,10 @@ public class UserDTO {
 	
 	@NotEmpty
 	private String about;
+
+	@Override
+	public int compareTo(UserDTO o) {
+		
+		return Comparator.comparingInt(UserDTO::getId).compare(this, o);
+	}
 }
