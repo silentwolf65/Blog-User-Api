@@ -1,17 +1,17 @@
 package com.blogapi.user.services.impl;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.blogapi.user.entities.Post;
 import com.blogapi.user.entities.User;
 import com.blogapi.user.exceptions.ResourceNotFoundException;
+import com.blogapi.user.payloads.PostDto;
 import com.blogapi.user.payloads.UserDTO;
+import com.blogapi.user.repositories.PostRepo;
 import com.blogapi.user.repositories.UserRepo;
 import com.blogapi.user.services.UserService;
 
@@ -23,13 +23,15 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	@Autowired
+	private PostRepo postRepo;
 	
 	// Create New User Method
 	@Override
 	public UserDTO createUser(UserDTO userDto) {
-		User user = this.dtoToUser(userDto);
+		User user = this.modelMapper.map(userDto, User.class);
 		User savedUser = this.userRepo.save(user);
-		return this.userToDto(savedUser);
+		return this.modelMapper.map(savedUser, UserDTO.class);
 	}
 
 	//Update User Information Method
@@ -44,16 +46,15 @@ public class UserServiceImpl implements UserService {
 		user.setAbout(userDto.getAbout());
 		
 		User updatedUser = this.userRepo.save(user);
-		return this.userToDto(updatedUser);
+		return this.modelMapper.map(updatedUser,UserDTO.class);
 	}
 
-	//Find User Method based on Id
+	//Find User based on Id
 	@Override
 	public UserDTO getUserById(Integer userId) {
 		User user = this.userRepo.findById(userId)
 				.orElseThrow(()-> new ResourceNotFoundException("User","id",userId));
-		
-		return this.userToDto(user);
+		return this.modelMapper.map(user, UserDTO.class);
 	}
 
 	//Find All The Available User Records 
@@ -61,7 +62,7 @@ public class UserServiceImpl implements UserService {
 	public List<UserDTO> getAllUsers() {
 		List<User> users = this.userRepo.findAll();
 		//converting and returning list of users
-		return users.stream().map(user-> this.userToDto(user)).collect(Collectors.toList());
+		return users.stream().map(user-> this.modelMapper.map(user,UserDTO.class)).sorted().collect(Collectors.toList());
 	}
 
 	//Delete User By Id
@@ -73,16 +74,25 @@ public class UserServiceImpl implements UserService {
 		this.userRepo.delete(user);
 	}
 	
-	//ModelMapper is easier way to convert one object to another
-	private User dtoToUser(UserDTO userDto) {
-		//returning converted object (userDto -> user)
-		return this.modelMapper.map(userDto, User.class);
-	}
+	/*
+	 * //ModelMapper is easier way to convert one object to another private User
+	 * dtoToUser(UserDTO userDto) { //returning converted object (userDto -> user)
+	 * return this.modelMapper.map(userDto, User.class); }
+	 * 
+	 * //ModelMapper is easier way to convert one object to another private UserDTO
+	 * userToDto(User user) { //returning converted object (userDto -> user) return
+	 * this.modelMapper.map(user, UserDTO.class); }
+	 */
+
 	
-	//ModelMapper is easier way to convert one object to another
-	private UserDTO userToDto(User user) {
-		//returning converted object (userDto -> user)
-		return this.modelMapper.map(user, UserDTO.class);
+	
+	@Override
+	public List<PostDto> getPostsByUserId(Integer userId) {
+		
+	User user=this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("user", "userId", userId));
+		List<Post> userPosts = this.postRepo.findByUser(user);
+		return userPosts.stream().map(post->this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+		
 	}
 
 }
