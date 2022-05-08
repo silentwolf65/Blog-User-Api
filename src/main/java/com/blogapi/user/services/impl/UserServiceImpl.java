@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
 	public UserDTO getUserById(Integer userId) {
 		User user = this.userRepo.findById(userId)
 				.orElseThrow(()-> new ResourceNotFoundException("User","id",userId));
+		
 		return this.modelMapper.map(user, UserDTO.class);
 	}
 
@@ -63,6 +64,7 @@ public class UserServiceImpl implements UserService {
 		List<User> users = this.userRepo.findAll();
 		//converting and returning list of users
 		return users.stream().map(user-> this.modelMapper.map(user,UserDTO.class)).sorted().collect(Collectors.toList());
+		
 	}
 
 	//Delete User By Id

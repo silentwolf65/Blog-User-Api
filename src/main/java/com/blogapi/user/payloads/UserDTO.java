@@ -4,12 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+
+import com.blogapi.user.entities.Post;
 
 @NoArgsConstructor
 @Data
@@ -32,6 +35,8 @@ public class UserDTO implements Comparable<UserDTO>{
 	@NotEmpty
 	private String about;
 
+	//private List<PostDto> posts = new ArrayList<>();
+	
 	@Override
 	public int compareTo(UserDTO o) {
 		

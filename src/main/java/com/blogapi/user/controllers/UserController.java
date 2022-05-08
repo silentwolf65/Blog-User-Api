@@ -25,7 +25,7 @@ import com.blogapi.user.services.UserService;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 	
 	@Autowired

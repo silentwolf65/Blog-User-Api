@@ -41,10 +41,14 @@ public class UserControllerTest {
 	@MockBean
 	private UserService userService;
 	
-	UserDTO userdto1 = new UserDTO(1,"John","johnwick@hightable.com","dogs","its john wick");
-	UserDTO userdto2= new UserDTO(2,"Robert","ironman@avengers.com","itstony","im iron man");
-	UserDTO userdto3 = new UserDTO(3,"Thor","thundergod@asguard.com","stormbreaker","God of thunder");
 	
+	  UserDTO userdto1 = new
+	  UserDTO(1,"John","johnwick@hightable.com","dogs","its john wick"); UserDTO
+	  userdto2= new
+	  UserDTO(2,"Robert","ironman@avengers.com","itstony","im iron man"); UserDTO
+	  userdto3 = new
+	  UserDTO(3,"Thor","thundergod@asguard.com","stormbreaker","God of thunder");
+	 
 	@Test
 	public void getAllUsers_success()throws Exception{
 		List<UserDTO> userList = new ArrayList<>(Arrays.asList(userdto1,userdto2,userdto3));

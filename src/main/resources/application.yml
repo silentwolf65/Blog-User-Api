@@ -4,8 +4,18 @@ server:
 #DataBase Properties
 spring:  datasource:    url: jdbc:oracle:thin:@localhost:1521:orcl
     username: scott
-    password: scott
+    password: tiger
     driver-class-name: oracle.jdbc.driver.OracleDriver
 
 #hibernate auto property  jpa:    hibernate:      ddl-auto: update
     show-sql: true 
+
+#multipart configuration  servlet:    multipart:      max-file-size: 10MB
+      max-request-size: 10MB
+      
+#Authentication credentials  
+   
+project:
+  image: images/          #Log property
+logging:  level:    '[org.springframework.security]': DEBUG
+

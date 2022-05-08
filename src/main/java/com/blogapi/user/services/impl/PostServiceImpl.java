@@ -3,7 +3,6 @@ package com.blogapi.user.services.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,13 +53,16 @@ public class PostServiceImpl implements PostService{
 
 	@Override
 	public PostDto updatePost(PostDto postDto, Integer postId) {
-		// TODO Auto-generated method stub
-		return null;
+		Post post = this.postRepo.findById(postId).orElseThrow(()-> new ResourceNotFoundException("post", "postId", postId));
+		post.setImageName(postDto.getImageName());
+		Post updatedPost = this.postRepo.save(post);
+		return this.modelMapper.map(updatedPost, PostDto.class);
 	}
 
 	@Override
 	public void deletePost(Integer postId) {
-		// TODO Auto-generated method stub
+		Post post = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "postId", postId));
+		this.postRepo.delete(post);
 		
 	}
 
@@ -80,8 +82,9 @@ public class PostServiceImpl implements PostService{
 
 	@Override
 	public PostDto getPostById(Integer postId) {
-		return null;
-		
+		Post post = this.postRepo.findById(postId)
+				.orElseThrow(()->new ResourceNotFoundException("Post", "postId", postId));
+		return this.modelMapper.map(post, PostDto.class);
 	}
 
 	@Override
