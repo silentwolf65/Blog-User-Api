@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler(UserNotFoundException.class)
-	public ResponseEntity<ApiResponse> UserNotFoundExceptionHandler(UserNotFoundException ex){
+	public ResponseEntity<ApiResponse> userNotFoundExceptionHandler(UserNotFoundException ex){
 		String message = ex.getMessage();
 		ApiResponse apiResponse = new ApiResponse(message, false);
 		return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
@@ -38,6 +38,6 @@ public class GlobalExceptionHandler {
 			resp.put(fieldName, message);
 		});
 		
-		return new ResponseEntity<Map<String,String>>(resp,HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(resp,HttpStatus.BAD_REQUEST);
 	}
 }

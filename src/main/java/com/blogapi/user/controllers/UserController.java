@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blogapi.user.config.AppConstants;
+import com.blogapi.user.config.AppProperties;
 import com.blogapi.user.payloads.ApiResponse;
 import com.blogapi.user.payloads.PostDto;
 import com.blogapi.user.payloads.UserDTO;
@@ -30,6 +32,9 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private AppProperties appProps;
 	
 	//POST-create User
 	@PostMapping("/")
@@ -51,7 +56,7 @@ public class UserController {
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<ApiResponse> deleteUser(@PathVariable Integer userId){
 		this.userService.deleteUser(userId);
-		return new ResponseEntity<>(new ApiResponse("User Deleted Successfully",true),HttpStatus.OK);
+		return new ResponseEntity<>(new ApiResponse(appProps.getMessages().get(AppConstants.DEL_SUCCESS),true),HttpStatus.OK);
 	}
 	
 	//GET- get User

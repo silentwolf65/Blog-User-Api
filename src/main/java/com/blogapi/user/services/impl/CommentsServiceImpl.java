@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.blogapi.user.config.AppConstants;
 import com.blogapi.user.entities.Comments;
 import com.blogapi.user.entities.Post;
 import com.blogapi.user.exceptions.ResourceNotFoundException;
@@ -23,7 +24,7 @@ public class CommentsServiceImpl implements CommentsService{
 	
 	@Override
 	public CommentsDto createComment(CommentsDto commentsDto, Integer postId) {
-		Post post = this.postRepo.findById(postId).orElseThrow(()-> new ResourceNotFoundException("post", "postId", postId));
+		Post post = this.postRepo.findById(postId).orElseThrow(()-> new ResourceNotFoundException(AppConstants.POST, AppConstants.POST_ID, postId));
 		Comments comment = this.modelMapper.map(commentsDto, Comments.class);
 		
 		comment.setPost(post);
@@ -33,7 +34,7 @@ public class CommentsServiceImpl implements CommentsService{
 
 	@Override
 	public void deleteComment(Integer commentId) {
-		Comments comment = this.commentsRepo.findById(commentId).orElseThrow(()-> new ResourceNotFoundException("comments", "commentId", commentId));
+		Comments comment = this.commentsRepo.findById(commentId).orElseThrow(()-> new ResourceNotFoundException(AppConstants.COMMENT, AppConstants.COMMENT_ID, commentId));
 		this.commentsRepo.delete(comment);
 	}
 	

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blogapi.user.config.AppConstants;
+import com.blogapi.user.config.AppProperties;
 import com.blogapi.user.payloads.ApiResponse;
 import com.blogapi.user.payloads.CommentsDto;
 import com.blogapi.user.services.CommentsService;
@@ -20,6 +22,9 @@ public class CommentsController {
 	
 	@Autowired
 	private CommentsService commentsService;
+	
+	@Autowired
+	private AppProperties appProps;
 	
 	//Post -Comment
 	@PostMapping("/post/{postId}/comments")
@@ -38,6 +43,6 @@ public class CommentsController {
 			@PathVariable Integer commentId
 			){
 		this.commentsService.deleteComment(commentId);
-		return new ResponseEntity<ApiResponse>(new ApiResponse("Comment deleted!",true),HttpStatus.OK);
+		return new ResponseEntity<ApiResponse>(new ApiResponse(appProps.getMessages().get(AppConstants.DEL_SUCCESS),true),HttpStatus.OK);
 	}
 }

@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.blogapi.user.config.AppConstants;
+import com.blogapi.user.config.AppProperties;
+import com.blogapi.user.payloads.ApiResponse;
 import com.blogapi.user.payloads.PostDto;
 import com.blogapi.user.services.FileService;
 import com.blogapi.user.services.PostService;
@@ -36,6 +39,9 @@ public class PostController {
 	
 	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	private AppProperties appProps;
 	
 	@Value("${project.image}")
 	private String path; 
@@ -81,7 +87,7 @@ public class PostController {
 	
 	
 	@GetMapping("/posts/search/{keywords}")
-	public ResponseEntity<List<PostDto>> searchPostByTitl(
+	public ResponseEntity<List<PostDto>> searchPostByTitle(
 			@PathVariable ("keywords") String keywords
 			){
 		List<PostDto> result = this.postService.searchPost(keywords);
@@ -117,7 +123,6 @@ public class PostController {
 			try {
 				StreamUtils.copy(resource, response.getOutputStream());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				System.err.println("error at downloadImage method");
 				e.printStackTrace();
 			}
@@ -132,5 +137,9 @@ public class PostController {
 		return new ResponseEntity<>(postDto,HttpStatus.OK);
 	}
 	
-	
+	@DeleteMapping("/posts/post/{postId}")
+	public ResponseEntity<ApiResponse> deletePost(@PathVariable Integer postId){
+		this.postService.deletePost(postId);
+		return new ResponseEntity<>(new ApiResponse(appProps.getMessages().get(AppConstants.DEL_SUCCESS), true),HttpStatus.OK);
+	}
 }
