@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blogapi.user.config.AppConstants;
+import com.blogapi.user.config.AppProperties;
 import com.blogapi.user.payloads.ApiResponse;
 import com.blogapi.user.payloads.CategoryDto;
 import com.blogapi.user.services.CategoryService;
@@ -26,31 +28,34 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 	
+	@Autowired
+	private AppProperties appProps;
+	
 	//create
 	@PostMapping("/")
 	public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto){
 		CategoryDto createdCategory = this.categoryService.createCategory(categoryDto);
-		return new ResponseEntity<CategoryDto>(createdCategory,HttpStatus.CREATED);
+		return new ResponseEntity<>(createdCategory,HttpStatus.CREATED);
 	}
 	
 	//update
 	@PutMapping("/{catId}")
 	public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto,@PathVariable Integer catId){
 		CategoryDto updatedCategory = this.categoryService.updateCategory(categoryDto, catId);
-		return new ResponseEntity<CategoryDto>(updatedCategory,HttpStatus.OK);
+		return new ResponseEntity<>(updatedCategory,HttpStatus.OK);
 	}
 	
 	//delete
 	@DeleteMapping("/{catId}")
 	public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Integer catId){
 		this.categoryService.deleteCategory(catId);
-		return new ResponseEntity<ApiResponse>(new ApiResponse("category deleted successfully", true),HttpStatus.OK);
+		return new ResponseEntity<>(new ApiResponse(appProps.getMessages().get(AppConstants.DEL_SUCCESS), true),HttpStatus.OK);
 	}
 	//get
 	@GetMapping("/{catId}")
 	public ResponseEntity<CategoryDto> getCategory(@PathVariable Integer catId){
 		CategoryDto category = this.categoryService.getCategory(catId);
-		return new ResponseEntity<CategoryDto>(category,HttpStatus.OK);
+		return new ResponseEntity<>(category,HttpStatus.OK);
 	}
 	//get All
 	@GetMapping("/")

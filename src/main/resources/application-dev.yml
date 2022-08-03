@@ -1,9 +1,6 @@
 server:
   port: 9090
-  
-  profiles:
-    active: dev
-    
+
 #DataBase Properties
 spring:  datasource:    url: jdbc:oracle:thin:@localhost:1521:orcl
     username: scott
@@ -14,10 +11,21 @@ spring:  datasource:    url: jdbc:oracle:thin:@localhost:1521:orcl
     show-sql: true 
 
 #multipart configuration  servlet:    multipart:      max-file-size: 10MB
-      max-request-size: 10MB        
+      max-request-size: 10MB
+      
 #Authentication credentials  
    
 project:
   image: images/          #Log property
 logging:  level:    '[org.springframework.security]': DEBUG
 
+#app Messages
+blog_api:
+  messages:
+    deleteSuccMsg: Deleted Successfully !!
+    defaultImgName: default.png
+    
+    
+    
+    
+    

@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.blogapi.user.config.AppConstants;
 import com.blogapi.user.entities.Category;
 import com.blogapi.user.exceptions.ResourceNotFoundException;
 import com.blogapi.user.payloads.CategoryDto;
@@ -25,27 +26,27 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public CategoryDto createCategory(CategoryDto categoryDto) {
 		Category category = this.modelMapper.map(categoryDto, Category.class);
-		Category addedCategory = this.categoryRepo.save(category);
+		//Category addedCategory = this.categoryRepo.save(category);
 		
-		return this.modelMapper.map(addedCategory, CategoryDto.class);
+		return this.modelMapper.map(this.categoryRepo.save(category), CategoryDto.class);
 	}
 
 	@Override
 	public CategoryDto updateCategory(CategoryDto categoryDto, Integer categoryId) {
 		Category category = this.categoryRepo.findById(categoryId)
-				.orElseThrow(()->new ResourceNotFoundException("Category", "categoryId", categoryId));
+				.orElseThrow(()->new ResourceNotFoundException(AppConstants.CATEGORY, AppConstants.CATEGORY_ID, categoryId));
 		
 		category.setCategoryTitle(categoryDto.getCategoryTitle());
 		category.setCategoryDescription(categoryDto.getCategoryDescription());
 		
-		Category updatedCategory = this.categoryRepo.save(category);
+		//Category updatedCategory = this.categoryRepo.save(category);
 		
-		return this.modelMapper.map(updatedCategory, CategoryDto.class);
+		return this.modelMapper.map(this.categoryRepo.save(category), CategoryDto.class);
 	}
 	
 	@Override
 	public void deleteCategory(Integer categoryId) {
-		Category category = this.categoryRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category", "categoryId", categoryId));
+		Category category = this.categoryRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException(AppConstants.CATEGORY, AppConstants.CATEGORY_ID, categoryId));
 		
 		this.categoryRepo.delete(category);
 	}
@@ -53,7 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public CategoryDto getCategory(Integer categoryId) {
 		Category category = this.categoryRepo.findById(categoryId)
-		.orElseThrow(()->new ResourceNotFoundException("Category", "categoryId", categoryId));
+		.orElseThrow(()->new ResourceNotFoundException(AppConstants.CATEGORY, AppConstants.CATEGORY_ID, categoryId));
 		
 		return this.modelMapper.map(category, CategoryDto.class);
 	}

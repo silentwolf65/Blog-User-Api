@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.blogapi.user.config.AppConstants;
 import com.blogapi.user.entities.Post;
 import com.blogapi.user.entities.User;
 import com.blogapi.user.exceptions.ResourceNotFoundException;
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDTO updateUser(UserDTO userDto, Integer userId) {
 		User user = this.userRepo.findById(userId)
-				.orElseThrow(()-> new ResourceNotFoundException("User","id",userId));
+				.orElseThrow(()-> new ResourceNotFoundException(AppConstants.USER,AppConstants.USER_ID,userId));
 		
 		user.setName(userDto.getName());
 		user.setEmail(userDto.getEmail());
@@ -53,7 +54,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDTO getUserById(Integer userId) {
 		User user = this.userRepo.findById(userId)
-				.orElseThrow(()-> new ResourceNotFoundException("User","id",userId));
+				.orElseThrow(()-> new ResourceNotFoundException(AppConstants.USER,AppConstants.USER_ID,userId));
+		
 		return this.modelMapper.map(user, UserDTO.class);
 	}
 
@@ -63,13 +65,14 @@ public class UserServiceImpl implements UserService {
 		List<User> users = this.userRepo.findAll();
 		//converting and returning list of users
 		return users.stream().map(user-> this.modelMapper.map(user,UserDTO.class)).sorted().collect(Collectors.toList());
+		
 	}
 
 	//Delete User By Id
 	@Override
 	public void deleteUser(Integer userId) {
 		User user = this.userRepo.findById(userId)
-				.orElseThrow(()-> new ResourceNotFoundException("User","id",userId));
+				.orElseThrow(()-> new ResourceNotFoundException(AppConstants.USER,AppConstants.USER_ID,userId));
 		
 		this.userRepo.delete(user);
 	}
@@ -89,7 +92,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<PostDto> getPostsByUserId(Integer userId) {
 		
-	User user=this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("user", "userId", userId));
+	User user=this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException(AppConstants.USER,AppConstants.USER_ID, userId));
 		List<Post> userPosts = this.postRepo.findByUser(user);
 		return userPosts.stream().map(post->this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
 		

@@ -21,6 +21,13 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
 	}
 	
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<ApiResponse> userNotFoundExceptionHandler(UserNotFoundException ex){
+		String message = ex.getMessage();
+		ApiResponse apiResponse = new ApiResponse(message, false);
+		return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
+	}
+	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Map<String,String>> handleMethodArgNotValidException(MethodArgumentNotValidException ex){
 		Map<String,String> resp = new HashMap<>();
@@ -31,6 +38,6 @@ public class GlobalExceptionHandler {
 			resp.put(fieldName, message);
 		});
 		
-		return new ResponseEntity<Map<String,String>>(resp,HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(resp,HttpStatus.BAD_REQUEST);
 	}
 }
